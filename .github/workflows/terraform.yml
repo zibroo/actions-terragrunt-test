@@ -25,14 +25,12 @@ jobs:
 
       - name: Initialize Terragrunt
         run: |
-          cd ${{ github.event.inputs.environment }}
           terragrunt init
         working-directory: ${{ github.event.inputs.environment }}
 
       - name: Terragrunt Plan
         id: plan
         run: |
-          cd ${{ github.event.inputs.environment }}
           terragrunt plan -out=tfplan
         working-directory: ${{ github.event.inputs.environment }}
 
@@ -49,6 +47,5 @@ jobs:
       - name: Terragrunt Apply
         if: steps.approval.outcome == 'success'
         run: |
-          cd ${{ github.event.inputs.environment }}
           terragrunt apply -auto-approve tfplan
         working-directory: ${{ github.event.inputs.environment }}
