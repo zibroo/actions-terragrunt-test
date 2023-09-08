@@ -9,9 +9,9 @@ on:
         default: 'dev'
         type: choice
         options:
-          dev: 'dev'
-          stage: 'stage'
-          prod: 'prod'
+        - dev
+        - stage 
+        - prod
       apply_this_plan:
         description: 'Do you want to apply this plan?'
         required: false
