@@ -11,12 +11,9 @@ on:
           dev: 'Dev'
           stage: 'Stage'
           prod: 'Prod'
-permissions:
-      id-token: write
-      contents: read
-
 jobs:
   terragrunt:
+    permissions: write-all
     runs-on: ubuntu-latest
     defaults:
       run:
