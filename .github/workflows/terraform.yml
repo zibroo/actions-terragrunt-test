@@ -11,23 +11,22 @@ on:
           dev: 'Dev'
           stage: 'Stage'
           prod: 'Prod'
+permissions:
+      id-token: write
+      contents: read
 
 jobs:
   terragrunt:
-    permissions:
-      id-token: write
-      contents: read
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
+        working-directory: ${{ github.event.inputs.environment }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-      - uses: actions/setup-node@v2
-        with:
-          node-version: "14"
-      - name: Configure AWS credentials from Test account
+
+      - name: Configure AWS credentials from AWS account
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: arn:aws:iam::790285888667:role/actionsrole
@@ -53,13 +52,11 @@ jobs:
       - name: Initialize Terragrunt
         run: |
           terragrunt init
-        working-directory: ${{ github.event.inputs.environment }}
 
       - name: Terragrunt Plan
         id: plan
         run: |
           terragrunt plan -out=tfplan
-        working-directory: ${{ github.event.inputs.environment }}
 
       - name: Request Approval
         id: approval
@@ -75,4 +72,3 @@ jobs:
         if: steps.approval.outcome == 'success'
         run: |
           terragrunt apply -auto-approve tfplan
-        working-directory: ${{ github.event.inputs.environment }}
