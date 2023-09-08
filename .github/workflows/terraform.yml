@@ -1,37 +1,54 @@
-name: Terraform Workflow
+name: Terragrunt Workflow
 
 on:
-  pull_request:
-    types:
-      - opened
-      - synchronize
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Select the environment to deploy'
+        required: true
+        default: 'dev'
+        options:
+          dev: 'Dev'
+          stage: 'Stage'
+          prod: 'Prod'
 
 jobs:
-  terraform:
+  terragrunt:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Install Terragrunt
-      run: |
-        wget https://github.com/gruntwork-io/terragrunt/releases/download/v0.34.0/terragrunt_linux_amd64
-        chmod +x terragrunt_linux_amd64
-        sudo mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
+      - name: Set up Terraform and Terragrunt
+        uses: hashicorp/setup-terraform@v1
 
-    - name: Terraform Plan
-      run: |
-        cd path/to/your/terraform/module
-        terragrunt init
-        terragrunt plan -input=false -out=tfplan
+      - name: Initialize Terragrunt
+        run: |
+          cd ${{ github.event.inputs.environment }}
+          terragrunt init
+        working-directory: ${{ github.event.inputs.environment }}
 
-    - name: Request Approval
-      id: approval
-      run: echo "Approval required to apply changes."
+      - name: Terragrunt Plan
+        id: plan
+        run: |
+          cd ${{ github.event.inputs.environment }}
+          terragrunt plan -out=tfplan
+        working-directory: ${{ github.event.inputs.environment }}
 
-    - name: Terraform Apply
-      if: steps.approval.outputs.result == 'approved'
-      run: |
-        cd path/to/your/terraform/module
-        terragrunt apply tfplan
+      - name: Request Approval
+        id: approval
+        run: echo "Requesting approval for Terraform changes in ${{ github.event.inputs.environment }}"
+      
+      - name: Wait for Approval
+        if: steps.approval.outcome == 'success'
+        run: |
+          echo "Waiting for approval..."
+          sleep 30  # Adjust the sleep duration as needed
+      
+      - name: Terragrunt Apply
+        if: steps.approval.outcome == 'success'
+        run: |
+          cd ${{ github.event.inputs.environment }}
+          terragrunt apply -auto-approve tfplan
+        working-directory: ${{ github.event.inputs.environment }}
