@@ -57,11 +57,11 @@ jobs:
           terragrunt plan -out=tfplan
 
       - name: Terragrunt Apply 
-        if:  github.event.inputs.environment  == 'true'
+        if:  github.event.inputs.apply_this_plan  == 'true'
         run: |
           terragrunt apply -auto-approve tfplan
 
       - name: Terragrunt Apply Not
-        if:  github.event.inputs.environment  == 'false'
+        if:  github.event.inputs.apply_this_plan  == 'false'
         run: |
           echo "COMPLETE! THIS PLAN WAN NOT APPLY. IF YOU WANT TO APPLY THIS PLAN RERUN WORKFLOW WITH APPLY SETTING"
