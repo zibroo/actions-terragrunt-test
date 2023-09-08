@@ -49,25 +49,24 @@ jobs:
       - name: Terragrunt Plan
         id: plan
         run: |
-          terragrunt plan -out=tfplan
+          terragrunt plan -out saved_plan
 
-      - name: Request Approval
-        id: approval
-        run: echo "Requesting approval for Terraform changes in ${{ github.event.inputs.environment }}"
-      
-      - name: Wait for Approval
-        uses: trstringer/manual-approval@v1
+      - name: Submit plan for approval
+        uses: jbergknoff/github-action-wait-for-terraform-plan-approval@v1
+        id: submit_plan
         with:
-          secret: ${{ github.TOKEN }}
-          approvers: zibroo
-          minimum-approvals: 1
-          issue-title: "Deploying ${{ github.event.inputs.environment }}"
-          issue-body: "Please approve or deny the deployment in ${{ github.event.inputs.environment }} env"
-          exclude-workflow-initiator-as-approver: false
-          additional-approved-words: 'yes'
-          additional-denied-words: 'no'
+          command: submit
+          plan_contents: ${{steps.plan.outputs.stdout}}
+
+      - name: Wait for approval
+        uses: jbergknoff/github-action-wait-for-terraform-plan-approval@v1
+        with:
+          command: wait
+          plan_id: ${{steps.submit_plan.outputs.plan_id}}
+
+
       
       - name: Terragrunt Apply
         if: steps.approval.outcome == 'success'
         run: |
-          terragrunt apply -auto-approve tfplan
+          terragrunt apply -auto-approve saved_plan
