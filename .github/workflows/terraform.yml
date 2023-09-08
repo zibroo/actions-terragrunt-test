@@ -64,8 +64,8 @@ jobs:
           issue-title: "Deploying ${{ github.event.inputs.environment }}"
           issue-body: "Please approve or deny the deployment in ${{ github.event.inputs.environment }} env"
           exclude-workflow-initiator-as-approver: false
-          additional-approved-words: ''
-          additional-denied-words: ''
+          additional-approved-words: 'yes'
+          additional-denied-words: 'no'
       
       - name: Terragrunt Apply
         if: steps.approval.outcome == 'success'
