@@ -24,6 +24,7 @@ jobs:
         uses: hashicorp/setup-terraform@v1
 
       - name: Initialize Terragrunt
+        uses: the-commons-project/terragrunt-github-actions@master
         run: |
           terragrunt init
         working-directory: ${{ github.event.inputs.environment }}
