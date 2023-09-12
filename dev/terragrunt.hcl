@@ -1,5 +1,5 @@
 terraform {
-  source = "./module"
+  source = "git@github.com:zibroo/terragruntec2.git"
 }
 
 
