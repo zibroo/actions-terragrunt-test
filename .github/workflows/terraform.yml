@@ -42,12 +42,12 @@ jobs:
         with:
             ssh-private-key: ${{ env.SSH_PRIVATE_KEY }}
 
-      # - name: Set up SSH
-      #   run: |
-      #     mkdir -p ~/.ssh
-      #     echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-      #     chmod 600 ~/.ssh/id_rsa
-      #     ssh-keyscan github.com >> ~/.ssh/known_hosts
+      - name: Set up SSH
+        run: |
+          echo "[default]
+                 s3 = 
+                     maxrequest = 50" > aws.txt
+          cat aws.txt
 
       - name: Configure AWS credentials from AWS account
         uses: aws-actions/configure-aws-credentials@v1
