@@ -43,33 +43,18 @@ jobs:
             ssh-private-key: ${{ env.SSH_PRIVATE_KEY }}
 
 
-      - name: Configure AWS credentials from AWS account
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: arn:aws:iam::981864830773:role/actions-rolee
-          aws-region: us-east-1
-
       - name: Configure AWS Credentials 1
         id: creds
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::981864830773:role/actions-rolee
+          role-session-name: taurus
           output-credentials: true
       - name: get caller identity 1
         run: |
           aws sts get-caller-identity
-      - name: Configure AWS Credentials 2
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: us-east-1
-          aws-access-key-id: ${{ steps.creds.outputs.aws-access-key-id }}
-          aws-secret-access-key: ${{ steps.creds.outputs.aws-secret-access-key }}
-          aws-session-token: ${{ steps.creds.outputs.aws-session-token }}
-          role-to-assume: arn:aws:iam::981864830773:role/actions-rolee
-      - name: get caller identity2
-        run: |
-          aws sts get-caller-identity
+      
 
       - name: Setup Terraform v1.5.7
         uses: hashicorp/setup-Terraform@v1
