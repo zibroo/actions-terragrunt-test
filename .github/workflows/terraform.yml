@@ -44,10 +44,7 @@ jobs:
 
       - name: Set up SSH
         run: |
-          echo "[default]
-                 s3 = 
-                     maxrequest = 50" > aws.txt
-          cat aws.txt
+          ls ~/.aws
 
       - name: Configure AWS credentials from AWS account
         uses: aws-actions/configure-aws-credentials@v1
