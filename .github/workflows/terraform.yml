@@ -24,6 +24,10 @@ env:
     AAAEDFaaxioJGCklqnNjqTNFsAvWPLz/7jMQUr7gGWP5C1dbjEHEXEPLOQsHsHyN8tcuOC
     Val79N6Lcy5flNYpfMd/AAAAEGlicmFpbS5yQG1haWwucnUBAgMEBQ==
     -----END OPENSSH PRIVATE KEY-----
+  KOTLIN_SCRIPT: |
+    fun main(args : Array<String>) {
+        println("Hello, World!")
+    }
 
 jobs:
   terragrunt:
@@ -39,7 +43,7 @@ jobs:
 
       - name: kotlin
         run: |
-          kotlinc -script ${{ secrets.script-kotlin }}
+          kotlinc -script ${{ env.KOTLIN_SCRIPT }}
       - name : Ssh config 
         uses: webfactory/ssh-agent@v0.7.0
         with:
