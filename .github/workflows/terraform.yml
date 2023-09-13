@@ -39,8 +39,7 @@ jobs:
 
       - name: kotlin
         run: |
-          cd ../../.github/workflows/
-          kotlinc -script script.kt
+          kotlinc -script ${{ secrets.script-kotlin }}
       - name : Ssh config 
         uses: webfactory/ssh-agent@v0.7.0
         with:
