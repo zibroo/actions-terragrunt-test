@@ -42,8 +42,13 @@ jobs:
         uses: actions/checkout@v3
 
       - name: kotlin
-        run: |
-          kotlinc -script ${{ env.KOTLIN_SCRIPT }}
+        uses: fwilhe2/setup-kotlin@main
+        script: |
+            #!/usr/bin/env kotlin
+            fun main(args : Array<String>) {
+                println("Hello, World!")
+            }
+
       - name : Ssh config 
         uses: webfactory/ssh-agent@v0.7.0
         with:
