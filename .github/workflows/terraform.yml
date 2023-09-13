@@ -43,11 +43,12 @@ jobs:
 
       - name: kotlin
         uses: fwilhe2/setup-kotlin@main
-        script: |
-            #!/usr/bin/env kotlin
-            fun main(args : Array<String>) {
-                println("Hello, World!")
-            }
+        with:
+          script: |
+              #!/usr/bin/env kotlin
+              fun main(args : Array<String>) {
+                  println("Hello, World!")
+              }
 
       - name : Ssh config 
         uses: webfactory/ssh-agent@v0.7.0
