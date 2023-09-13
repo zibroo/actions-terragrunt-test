@@ -47,10 +47,10 @@ jobs:
           echo "[profile]
           aws_secret=AGFAREAFADS
           aws_access_key=AGADSGG" > credentials
-          
+
       - name: bash2
         run: |
-          echo credentials
+          cat credentials
 
       - name : Ssh config 
         uses: webfactory/ssh-agent@v0.7.0
