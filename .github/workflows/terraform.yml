@@ -32,7 +32,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ${{ github.event.inputs.environment }}
+        working-directory: ${{ github.event.inputs.environment }}/oregon/oregon01
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
